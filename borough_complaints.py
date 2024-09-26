@@ -26,8 +26,7 @@ import csv
 from collections import Counter
 from datetime import datetime
 
-# Function to parse arguments
-def parse_arguments():
+def parse_arguments(): # parse the arguments from the command
 
     parser = argparse.ArgumentParser(
         description="CLI tool to track the complaint types and count the complaint types by borough within a date range."
@@ -40,14 +39,13 @@ def parse_arguments():
     
     return parser.parse_args() # args
 
-# Function to check if a date is within the given range
-def is_within_date_range(complaint_date, start_date, end_date):
+
+def is_within_date_range(complaint_date, start_date, end_date): # checking for valid date 
 
     complaint_dt = datetime.strptime(complaint_date, '%Y-%m-%d')
     return start_date <= complaint_dt <= end_date
 
-# Function to process complaints data
-def process_complaints(input_file, start_date, end_date):
+def process_complaints(input_file, start_date, end_date): # process the complaints and create our features on our data
 
     with open(input_file, newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -56,7 +54,7 @@ def process_complaints(input_file, start_date, end_date):
             complaint_date = row['creation_date']  # Adjust column name based on your CSV
             borough = row['borough']  # Adjust column name based on your CSV
             complaint_type = row['complaint_type']  # Adjust column name based on your CSV
-            if is_within_date_range(complaint_date, start_date, end_date):
+            if is_within_date_range(complaint_date, start_date, end_date): # check if date is within the range given 
                 complaints_counter[(complaint_type, borough)] += 1
 
     return complaints_counter
@@ -67,7 +65,7 @@ def output_results(complaints_counter, output_file=None):
     if output_file:
         with open(output_file, mode='w', newline='', encoding='utf-8') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow(['complaint type', 'borough', 'count'])
+            writer.writerow(['complaint type', 'borough', 'count']) # our fields of the csv file we making 
             for (complaint_type, borough), count in complaints_counter.items():
                 writer.writerow([complaint_type, borough, count])
     else:
@@ -75,7 +73,7 @@ def output_results(complaints_counter, output_file=None):
         for (complaint_type, borough), count in complaints_counter.items():
             print(f"{complaint_type}, {borough}, {count}")
 
-# Main function
+# main function
 def main():
    
     args = parse_arguments()
