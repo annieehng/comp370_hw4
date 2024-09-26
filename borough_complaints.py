@@ -28,7 +28,7 @@ from datetime import datetime
 
 def parse_arguments(): # parse the arguments from the command
 
-    parser = argparse.ArgumentParser(
+    parser = argparse.ArgumentParser( # helpful message for the user 
         description="CLI tool to track the complaint types and count the complaint types by borough within a date range."
     )
 
@@ -51,16 +51,15 @@ def process_complaints(input_file, start_date, end_date): # process the complain
         reader = csv.DictReader(csvfile)
         complaints_counter = Counter()
         for row in reader:
-            complaint_date = row['creation_date']  # Adjust column name based on your CSV
-            borough = row['borough']  # Adjust column name based on your CSV
-            complaint_type = row['complaint_type']  # Adjust column name based on your CSV
+            complaint_date = row['creation_date'] # select date column
+            borough = row['borough'] # select borough column
+            complaint_type = row['complaint_type'] # select the complaint type column
             if is_within_date_range(complaint_date, start_date, end_date): # check if date is within the range given 
                 complaints_counter[(complaint_type, borough)] += 1
 
     return complaints_counter
 
-# Function to output the results
-def output_results(complaints_counter, output_file=None):
+def output_results(complaints_counter, output_file=None): # output the results 
 
     if output_file:
         with open(output_file, mode='w', newline='', encoding='utf-8') as csvfile:
